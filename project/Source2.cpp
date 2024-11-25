@@ -36,7 +36,7 @@ struct PoisonousFood
 {
     int x, y;
     bool isActive1;
-    float timer1;  
+    float timer1;
 }poisonousFood;
 
 
@@ -82,7 +82,7 @@ void update()
     if ((s[0].x == f.x) && (s[0].y == f.y))
     {
         snakeSize++;
-        score+=5;
+        score += 5;
         if (score > highestScore) highestScore = score;
         if (score % 15 == 0 && score != 0) delay -= 0.01;
         do {
@@ -96,42 +96,30 @@ void update()
             bonusFood.x = rand() % (A - 1);
             bonusFood.y = rand() % (B - 1);
             bonusFood.isActive = true;
-            bonusFood.timer = 5.0f;
+            bonusFood.timer = 7.0f;
         }
 
         if (!poisonousFood.isActive1) {
             poisonousFood.x = rand() % (A - 1);
             poisonousFood.y = rand() % (B - 1);
             poisonousFood.isActive1 = true;
-            poisonousFood.timer1 = 4.0f;  
+            poisonousFood.timer1 = 4.0f;  // Poisonous food will last for 4 seconds
         }
 
 
     }
     if (poisonousFood.isActive1 && (s[0].x == poisonousFood.x) && (s[0].y == poisonousFood.y))
     {
-        score -= 10;  
-        poisonousFood.isActive1 = false;  
+        score -= 10;  // Decrease score by 10
+        poisonousFood.isActive1 = false;  // Remove the poisonous food
     }
 
+    // Decrease timer of poisonous food and deactivate it when the time is up
     if (poisonousFood.isActive1) {
         poisonousFood.timer1 -= delay;
         if (poisonousFood.timer1 <= 0) {
             poisonousFood.isActive1 = false;
         }
-    }
-    if (score >= 15 && score % 15 == 0 && !bonusFood.isActive)
-    {
-
-        do {
-            bonusFood.x = rand() % (A - 1);
-            bonusFood.y = rand() % (B - 1);
-        } while (isCollisionWithObstacle(bonusFood.x, bonusFood.y));
-        if (score == 0)
-        {
-            bonusFood.isActive = false;
-        }
-        bonusFood.isActive = true;
     }
     if (score < 0) {
         snakeSize = 2;
@@ -169,7 +157,7 @@ void update()
         bonusFood.isActive = true;
     }
     if (bonusFood.isActive) {
-       bonusFood.timer -= delay;
+        bonusFood.timer -= delay;
         if (bonusFood.timer <= 0) {
             bonusFood.isActive = false;
         }
@@ -218,7 +206,7 @@ int main()
 
     RenderWindow window(VideoMode(w, h), "SNAKE WORLD");
 
-    Texture t1, t2, t3, t4, t5,t6;
+    Texture t1, t2, t3, t4, t5, t6;
     t1.loadFromFile("images/white.png");
     t2.loadFromFile("images/red.png");
     t3.loadFromFile("images/food.png");
@@ -332,7 +320,7 @@ int main()
         {
             sprite6.setPosition(poisonousFood.x * gsize, poisonousFood.y * gsize);
             window.draw(sprite6);
-            
+
         }
 
         window.draw(scoreText);

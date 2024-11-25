@@ -17,7 +17,7 @@ struct Snake
 {
     int x, y;
 
-} s[300];
+} s[100];
 
 
 struct Fruit
@@ -29,15 +29,8 @@ struct BonusFood
 {
     int x, y;
     bool isActive;
-    float timer;
-}bonusFood;
 
-struct PoisonousFood
-{
-    int x, y;
-    bool isActive1;
-    float timer1;  
-}poisonousFood;
+}bonusFood;
 
 
 struct Obstacle
@@ -82,9 +75,9 @@ void update()
     if ((s[0].x == f.x) && (s[0].y == f.y))
     {
         snakeSize++;
-        score+=5;
+        score++;
         if (score > highestScore) highestScore = score;
-        if (score % 15 == 0 && score != 0) delay -= 0.01;
+        if (score % 5 == 0 && score != 0) delay -= 0.01;
         do {
             f.x = rand() % (A - 1);
             f.y = rand() % (B - 1);
@@ -92,70 +85,15 @@ void update()
         if (f.x >= 0 && f.x <= 3) f.x = 4;
         if (f.y >= 0 && f.y <= 4) f.y = 4;
 
-        if (!bonusFood.isActive) {
-            bonusFood.x = rand() % (A - 1);
-            bonusFood.y = rand() % (B - 1);
-            bonusFood.isActive = true;
-            bonusFood.timer = 5.0f;
-        }
-
-        if (!poisonousFood.isActive1) {
-            poisonousFood.x = rand() % (A - 1);
-            poisonousFood.y = rand() % (B - 1);
-            poisonousFood.isActive1 = true;
-            poisonousFood.timer1 = 4.0f;  
-        }
-
-
     }
-    if (poisonousFood.isActive1 && (s[0].x == poisonousFood.x) && (s[0].y == poisonousFood.y))
-    {
-        score -= 10;  
-        poisonousFood.isActive1 = false;  
-    }
-
-    if (poisonousFood.isActive1) {
-        poisonousFood.timer1 -= delay;
-        if (poisonousFood.timer1 <= 0) {
-            poisonousFood.isActive1 = false;
-        }
-    }
-    if (score >= 15 && score % 15 == 0 && !bonusFood.isActive)
-    {
-
-        do {
-            bonusFood.x = rand() % (A - 1);
-            bonusFood.y = rand() % (B - 1);
-        } while (isCollisionWithObstacle(bonusFood.x, bonusFood.y));
-        if (score == 0)
-        {
-            bonusFood.isActive = false;
-        }
-        bonusFood.isActive = true;
-    }
-    if (score < 0) {
-        snakeSize = 2;
-        score = 0;
-        delay = 0.1;
-        dir = 0;
-        s[0].x = A / 2;
-        s[0].y = B / 2;
-        for (int i = snakeSize; i > 0; i--)
-        {
-            s[i].x = s[i - 1].x;
-            s[i].y = s[i - 1].y;
-        }
-    }
-
-
 
     if (bonusFood.isActive && (s[0].x == bonusFood.x) && (s[0].y == bonusFood.y))
     {
-        score += 10;
+        score += 3;
         bonusFood.isActive = false;
     }
 
-    if (score >= 15 && score % 15 == 0 && !bonusFood.isActive)
+    if (score >= 5 && score % 5 == 0 && !bonusFood.isActive)
     {
 
         do {
@@ -167,12 +105,6 @@ void update()
             bonusFood.isActive = false;
         }
         bonusFood.isActive = true;
-    }
-    if (bonusFood.isActive) {
-       bonusFood.timer -= delay;
-        if (bonusFood.timer <= 0) {
-            bonusFood.isActive = false;
-        }
     }
 
 
@@ -218,19 +150,17 @@ int main()
 
     RenderWindow window(VideoMode(w, h), "SNAKE WORLD");
 
-    Texture t1, t2, t3, t4, t5,t6;
+    Texture t1, t2, t3, t4, t5;
     t1.loadFromFile("images/white.png");
     t2.loadFromFile("images/red.png");
     t3.loadFromFile("images/food.png");
     t4.loadFromFile("images/purple.png");
     t5.loadFromFile("images/background4.0.png");
-    t6.loadFromFile("images/green.png");
     Sprite sprite1(t1);
     Sprite sprite2(t2);
     Sprite sprite3(t3);
     Sprite sprite4(t4);
     Sprite sprite5(t5);
-    Sprite sprite6(t6);
 
     Font font;
     font.loadFromFile("images/arial.ttf");
@@ -326,13 +256,6 @@ int main()
         {
             sprite2.setPosition(s[i].x * gsize, s[i].y * gsize);
             window.draw(sprite2);
-        }
-        int a = 0;
-        if (poisonousFood.isActive1)
-        {
-            sprite6.setPosition(poisonousFood.x * gsize, poisonousFood.y * gsize);
-            window.draw(sprite6);
-            
         }
 
         window.draw(scoreText);
